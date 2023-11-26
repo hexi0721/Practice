@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class HumanAnimation : MonoBehaviour
 {
+    Animation Anim;
 
     bool IsFW, IsBK, IsLT, IsRT;
 
     private void Start()
     {
+
+        Anim = GetComponent<Animation>();
+        Anim.Play();
+
         IsFW = false;
         IsBK = false;
         IsLT = false;
         IsRT = false;
+
+
     }
 
     void Update()
@@ -22,7 +29,7 @@ public class HumanAnimation : MonoBehaviour
         if (Input.GetKey(KeyCode.W) && IsBK == false )
         {
             IsFW = true;
-
+            Anim.Play();
             transform.Translate(Vector3.forward * Time.deltaTime * 5 , Space.Self);
 
             if (Input.GetKey(KeyCode.A) && IsRT == false)
@@ -65,14 +72,14 @@ public class HumanAnimation : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A) && IsRT == false && IsFW == false && IsBK == false)
         {
-            Debug.Log("往左走");
+            // Debug.Log("往左走");
             IsLT = true;
             transform.Translate(Vector3.left * Time.deltaTime * 4, Space.Self);
         }
         
         if (Input.GetKey(KeyCode.D) && IsLT == false && IsFW == false && IsBK == false)
         {
-            Debug.Log("往右走");
+            // Debug.Log("往右走");
             IsRT = true;
             transform.Translate(Vector3.right * Time.deltaTime * 4, Space.Self);
         }
