@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class HumanAnimation : MonoBehaviour
 {
-    Animation Anim;
+    public float animspeed = 1.5f;
+    Animator anim;
+
 
     bool IsFW, IsBK, IsLT, IsRT;
 
     private void Start()
     {
 
-        Anim = GetComponent<Animation>();
-        Anim.Play();
+        anim = GetComponent<Animator>();
+        animspeed = anim.GetCurrentAnimatorStateInfo(0).speed;
 
         IsFW = false;
         IsBK = false;
@@ -24,12 +26,16 @@ public class HumanAnimation : MonoBehaviour
 
     void Update()
     {
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
 
+        anim.SetFloat("Speed", v);
+        anim.SetFloat("Direction", h);
 
         if (Input.GetKey(KeyCode.W) && IsBK == false )
         {
             IsFW = true;
-            Anim.Play();
+            
             transform.Translate(Vector3.forward * Time.deltaTime * 5 , Space.Self);
 
             if (Input.GetKey(KeyCode.A) && IsRT == false)
