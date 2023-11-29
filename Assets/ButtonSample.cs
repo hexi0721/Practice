@@ -5,7 +5,6 @@ using UnityEngine;
 public class ButtonSample : MonoBehaviour
 {
 
-    int n;
     Rect btntest;
 
     public GameObject Human;
@@ -13,17 +12,10 @@ public class ButtonSample : MonoBehaviour
     Vector3 pos ;
     public GUISkin skin;
 
-    private Animator animator;
-
-
     Transform dragging;
     Vector3 offset;
 
-
     [SerializeField] private string s;
-    [SerializeField] private List<GameObject> obj;
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -36,8 +28,6 @@ public class ButtonSample : MonoBehaviour
 
         s = "Hello World";
 
-        animator = GetComponent<Animator>();
-
         dragging = null;
         offset = Vector3.zero;
     }
@@ -46,7 +36,8 @@ public class ButtonSample : MonoBehaviour
     {
         /*if(Input.GetMouseButtonDown(0)) 
         {
-            n = Random.Range(1, 4);
+
+            int n = Random.Range(1, 4);
             Human.transform.localScale = new Vector3(n , n , n);
 
             GameObject G =  Instantiate(Human, pos, Quaternion.identity) as GameObject;
@@ -59,12 +50,8 @@ public class ButtonSample : MonoBehaviour
             Instantiate(obj[n], pos + new Vector3(1,0,0), Quaternion.identity) ;
 
         
-        }
-
-        if(Input.GetMouseButtonDown(1)) 
-        {
-            animator.enabled = !animator.enabled;
         }*/
+
 
         
         if (Input.GetMouseButtonDown(0)) 
@@ -123,33 +110,22 @@ public class ButtonSample : MonoBehaviour
         Vector3 ScreenPosNear = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane);
         Vector3 ScreenPosFar = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.farClipPlane);
 
-        /*
-        Debug.Log(Camera.main.nearClipPlane);
-        Debug.Log(Camera.main.farClipPlane);
-        */
-
         Vector3 WorldPosNear = Camera.main.ScreenToWorldPoint(ScreenPosNear);
         Vector3 WorldPosFar = Camera.main.ScreenToWorldPoint(ScreenPosFar);
-        /*
-        Debug.Log(WorldPosNear);
-        Debug.Log(WorldPosFar);
-        */
-
+        
         Physics.Raycast(WorldPosNear, WorldPosFar - WorldPosNear, out hit);
-
 
         return hit;
     }
 
     private void OnGUI()
     {
+        /*
         btntest.x = Screen.width / 2;
         btntest.y = Screen.height / 2;
         btntest.width = Screen.width /3;
         btntest.height = Screen.height /3;
         
-
-
         if (GUI.Button(btntest, "buttontest" , skin.button))
         {
             
@@ -161,7 +137,7 @@ public class ButtonSample : MonoBehaviour
 
             Humen.Clear();
 
-        }
+        }*/
 
         GUI.Label(new Rect(20, 20, 60, 60), "Hello" , skin.label);
 
