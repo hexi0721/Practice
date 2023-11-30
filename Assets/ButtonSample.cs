@@ -54,14 +54,10 @@ public class ButtonSample : MonoBehaviour
 
 
         
+        /*
         if (Input.GetMouseButtonDown(0)) 
         {
 
-            /*
-            Debug.Log("Input.mousePosition: " + Input.mousePosition);
-            Debug.Log("Camera.main.ScreenToWorldPoint(Input.mousePosition) : " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            Debug.Log("Camera.main.WorldToScreenPoint(Input.mousePosition) : " + Camera.main.WorldToScreenPoint(Input.mousePosition));
-            */
 
             if(dragging == null)
             {
@@ -100,6 +96,7 @@ public class ButtonSample : MonoBehaviour
             dragging.position = WorldPos ;
 
         }
+        */
 
     }
 
