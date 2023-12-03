@@ -579,20 +579,29 @@ ModelImporter:
           - serializedVersion: 3
             time: 0
             value: 1
+            inSlope: 0.06960736
+            outSlope: 0.06960736
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.3014169
+            value: 1.0209808
             inSlope: 0
             outSlope: 0
-            tangentMode: 34
+            tangentMode: 0
             weightedMode: 0
             inWeight: 0
             outWeight: 0
           - serializedVersion: 3
             time: 1
             value: 1
-            inSlope: 0
-            outSlope: 0
+            inSlope: -0.030033411
+            outSlope: -0.030033411
             tangentMode: 34
             weightedMode: 0
-            inWeight: 0
+            inWeight: 0.33333334
             outWeight: 0
           preInfinity: 2
           postInfinity: 2
