@@ -6,13 +6,13 @@ public class HumanAnimation : MonoBehaviour
 {
 
     [SerializeField] float ModelCenter, ModelHeight;
-    
 
+    public float tmp = 0;
 
     Animator anim;
     CapsuleCollider col;
-
-    [SerializeField] bool IsFW, IsBK, IsLT, IsRT , IsQ , IsE , CanJump;
+    Rigidbody rb;
+    [SerializeField] bool IsFW, IsBK, IsLT, IsRT , IsQ , IsE , IsWave;
 
     AnimatorStateInfo CurrentBaseState;
 
@@ -25,6 +25,7 @@ public class HumanAnimation : MonoBehaviour
     static int Right = Animator.StringToHash("Base Layer.Right");
     static int Left = Animator.StringToHash("Base Layer.Left");
     static int JumpState = Animator.StringToHash("Base Layer.Jump");
+    static int WaveState = Animator.StringToHash("Base Layer.Wave");
 
 
     private void Start()
@@ -32,14 +33,16 @@ public class HumanAnimation : MonoBehaviour
 
         anim = GetComponent<Animator>();
         col = GetComponent<CapsuleCollider>();
-        
+        rb = GetComponent<Rigidbody>();
+
         IsFW = false;
         IsBK = false;
         IsLT = false;
         IsRT = false;
         IsQ = false;
         IsE = false;
-        CanJump = false;
+        IsWave = false;
+        
         
 
     }
@@ -54,27 +57,39 @@ public class HumanAnimation : MonoBehaviour
         //anim.SetFloat("Direction", h);
 
         CurrentBaseState = anim.GetCurrentAnimatorStateInfo(0);
-        
-        if (CurrentBaseState.fullPathHash == Idle01State || CurrentBaseState.fullPathHash == toIdle01State || CurrentBaseState.fullPathHash == Idle02State || CurrentBaseState.fullPathHash == toIdle02State
-            || CurrentBaseState.fullPathHash == Forward || CurrentBaseState.fullPathHash == Backward  || CurrentBaseState.fullPathHash == Right  || CurrentBaseState.fullPathHash == Left)
+
+        if ((CurrentBaseState.fullPathHash == Idle01State || CurrentBaseState.fullPathHash == toIdle01State || CurrentBaseState.fullPathHash == Idle02State || CurrentBaseState.fullPathHash == toIdle02State ||
+            CurrentBaseState.fullPathHash == Forward || CurrentBaseState.fullPathHash == Backward || CurrentBaseState.fullPathHash == Right || CurrentBaseState.fullPathHash == Left) && IsWave != true)
         {
+            Action();
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                
+
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+                rb.AddForce(new Vector2(rb.velocity.x, 250f));
+
+
                 anim.SetBool("Jump", true);
 
 
             }
 
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                anim.SetTrigger("Wave");
+                IsWave = true;
+            }
+
         }
         else if (CurrentBaseState.fullPathHash == JumpState)
         {
-            CanJump = false;
+            
             anim.SetBool("Jump", false);
+            Action();
 
-            Walk("Jump");
         }
+        
 
         if (Input.GetKeyUp(KeyCode.W)) { IsFW = false; anim.SetBool("Forward", false); anim.SetFloat("Speed", 0); }
         if (Input.GetKeyUp(KeyCode.S)) { IsBK = false; anim.SetBool("Backward", false); anim.SetFloat("Speed", 0); }
@@ -83,17 +98,15 @@ public class HumanAnimation : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Q)) { IsQ = false; }
         if (Input.GetKeyUp(KeyCode.E)) { IsE = false; }
         if (Input.GetKeyUp(KeyCode.Space)) { anim.SetBool("Jump", false); }
-
-
-
-        Walk("Normal");
-        
+        if (Input.GetKeyUp(KeyCode.F)) { IsWave = false; }
 
 
     }
 
-    void Walk(string Action)
+    void Action()
     {
+        
+
         if (Input.GetKey(KeyCode.Q) && IsE == false)
         {
             IsQ = true;
@@ -111,7 +124,31 @@ public class HumanAnimation : MonoBehaviour
             IsFW = true;
             anim.SetBool("Forward", true);
 
-            transform.Translate(Vector3.forward * Time.deltaTime, Space.Self);
+            if (Input.GetKey(KeyCode.A) && IsRT == false) // 左走;
+            {
+
+                anim.SetFloat("Direction", -1);
+                anim.SetBool("Left", true);
+                transform.Translate(new Vector3(-1 / 1.414f, 0, 1 / 1.414f) * Time.deltaTime * 2, Space.Self);
+                IsLT = true;
+
+            }
+            else if (Input.GetKey(KeyCode.D) && IsLT == false) // 右走
+            {
+
+                anim.SetFloat("Direction", 1);
+                anim.SetBool("Right", true);
+                transform.Translate(new Vector3(1 / 1.414f, 0, 1 / 1.414f) * Time.deltaTime * 2, Space.Self);
+                IsRT = true;
+
+            }
+            else
+            {
+                transform.Translate(Vector3.forward * Time.deltaTime * 2, Space.Self);
+            }
+
+
+
 
         }
         else if (Input.GetKey(KeyCode.S) && IsFW == false) // 後退
@@ -119,27 +156,55 @@ public class HumanAnimation : MonoBehaviour
             IsBK = true;
             anim.SetBool("Backward", true);
 
+            if (Input.GetKey(KeyCode.A) && IsRT == false) // 左走;
+            {
+
+                anim.SetFloat("Direction", -1);
+                anim.SetBool("Left", true);
+                transform.Translate(new Vector3(-1 / 1.414f, 0, -1 / 1.414f) * Time.deltaTime, Space.Self);
+                IsLT = true;
+
+            }
+            else if (Input.GetKey(KeyCode.D) && IsLT == false) // 右走
+            {
+
+                anim.SetFloat("Direction", 1);
+                anim.SetBool("Right", true);
+                transform.Translate(new Vector3(1 / 1.414f, 0, -1 / 1.414f) * Time.deltaTime, Space.Self);
+                IsRT = true;
+
+            }
+            else
+            {
+                transform.Translate(Vector3.back * Time.deltaTime, Space.Self);
+            }
+
+
         }
 
-        if (Input.GetKey(KeyCode.A) && IsRT == false) // 左走;
+        if (Input.GetKey(KeyCode.A) && IsRT == false && IsFW == false && IsBK == false) // 左走;
         {
 
             anim.SetFloat("Direction", -1);
             anim.SetBool("Left", true);
-
+            transform.Translate(Vector3.left * Time.deltaTime * 2, Space.Self);
             IsLT = true;
 
         }
 
-        if (Input.GetKey(KeyCode.D) && IsLT == false) // 右走
+        if (Input.GetKey(KeyCode.D) && IsLT == false && IsFW == false && IsBK == false) // 右走
         {
 
             anim.SetFloat("Direction", 1);
             anim.SetBool("Right", true);
-
+            transform.Translate(Vector3.right * Time.deltaTime * 2, Space.Self);
             IsRT = true;
 
         }
+
+
+        
+        
     }
     
 }
