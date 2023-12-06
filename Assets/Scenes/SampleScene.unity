@@ -464,15 +464,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1fcb3370ba93241a57b71493c35996, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ModelCenter: 0
-  ModelHeight: 0
+  Curve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   IsFW: 0
   IsBK: 0
   IsLT: 0
   IsRT: 0
   IsQ: 0
   IsE: 0
-  CanJump: 0
+  IsWave: 0
 --- !u!54 &836225787
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -918,15 +922,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1fcb3370ba93241a57b71493c35996, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ModelCenter: 0.95
-  ModelHeight: 1.9
+  Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1.8
+      inSlope: -0.83167386
+      outSlope: -0.83167386
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.4019989
+      value: 1.465668
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7326181
+      value: 1.46327
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.055005
+      value: 1.368054
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.516193
+      value: 1.9
+      inSlope: 1.1534252
+      outSlope: 1.1534252
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   IsFW: 0
   IsBK: 0
   IsLT: 0
   IsRT: 0
   IsQ: 0
   IsE: 0
-  CanJump: 0
+  IsWave: 0
 --- !u!4 &1395262721 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400120, guid: 5917c0e93d180a842b61d1ebc62a195c, type: 3}

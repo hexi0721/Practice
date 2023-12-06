@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class HumanAnimation : MonoBehaviour
 {
 
-    [SerializeField] float ModelCenter, ModelHeight;
 
-    public float tmp = 0;
-
+    float JumpCurveTime = 0;
     Animator anim;
+    public AnimationCurve Curve;
     CapsuleCollider col;
     Rigidbody rb;
     [SerializeField] bool IsFW, IsBK, IsLT, IsRT , IsQ , IsE , IsWave;
@@ -31,6 +31,7 @@ public class HumanAnimation : MonoBehaviour
     private void Start()
     {
 
+
         anim = GetComponent<Animator>();
         col = GetComponent<CapsuleCollider>();
         rb = GetComponent<Rigidbody>();
@@ -42,7 +43,6 @@ public class HumanAnimation : MonoBehaviour
         IsQ = false;
         IsE = false;
         IsWave = false;
-        
         
 
     }
@@ -61,6 +61,7 @@ public class HumanAnimation : MonoBehaviour
         if ((CurrentBaseState.fullPathHash == Idle01State || CurrentBaseState.fullPathHash == toIdle01State || CurrentBaseState.fullPathHash == Idle02State || CurrentBaseState.fullPathHash == toIdle02State ||
             CurrentBaseState.fullPathHash == Forward || CurrentBaseState.fullPathHash == Backward || CurrentBaseState.fullPathHash == Right || CurrentBaseState.fullPathHash == Left) && IsWave != true)
         {
+            JumpCurveTime = 0;
             Action();
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -84,7 +85,10 @@ public class HumanAnimation : MonoBehaviour
         }
         else if (CurrentBaseState.fullPathHash == JumpState)
         {
-            
+            col.height = Curve.Evaluate(JumpCurveTime);
+            col.center = new Vector3(col.center.x, col.height / 2, col.center.z);
+
+            JumpCurveTime += Time.deltaTime;
             anim.SetBool("Jump", false);
             Action();
 
