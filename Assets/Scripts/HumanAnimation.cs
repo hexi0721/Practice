@@ -9,10 +9,12 @@ public class HumanAnimation : MonoBehaviour
 
     float JumpCurveTime = 0;
     Animator anim;
-    public AnimationCurve Curve;
+
+    public AnimationCurve Curve; // 配合跳躍高度
     CapsuleCollider col;
     Rigidbody rb;
-    [SerializeField] bool IsFW, IsBK, IsLT, IsRT , IsQ , IsE , IsWave;
+
+    [SerializeField] bool IsFW, IsBK, IsLT, IsRT , IsQ , IsE ;
 
     AnimatorStateInfo CurrentBaseState;
 
@@ -25,7 +27,7 @@ public class HumanAnimation : MonoBehaviour
     static int Right = Animator.StringToHash("Base Layer.Right");
     static int Left = Animator.StringToHash("Base Layer.Left");
     static int JumpState = Animator.StringToHash("Base Layer.Jump");
-    static int WaveState = Animator.StringToHash("Base Layer.Wave");
+    //static int TalkState = Animator.StringToHash("Base Layer.Talk");
 
 
     private void Start()
@@ -42,8 +44,6 @@ public class HumanAnimation : MonoBehaviour
         IsRT = false;
         IsQ = false;
         IsE = false;
-        IsWave = false;
-        
 
     }
 
@@ -59,37 +59,38 @@ public class HumanAnimation : MonoBehaviour
         CurrentBaseState = anim.GetCurrentAnimatorStateInfo(0);
 
         if ((CurrentBaseState.fullPathHash == Idle01State || CurrentBaseState.fullPathHash == toIdle01State || CurrentBaseState.fullPathHash == Idle02State || CurrentBaseState.fullPathHash == toIdle02State ||
-            CurrentBaseState.fullPathHash == Forward || CurrentBaseState.fullPathHash == Backward || CurrentBaseState.fullPathHash == Right || CurrentBaseState.fullPathHash == Left) && IsWave != true)
+            CurrentBaseState.fullPathHash == Forward || CurrentBaseState.fullPathHash == Backward || CurrentBaseState.fullPathHash == Right || CurrentBaseState.fullPathHash == Left) )
         {
             JumpCurveTime = 0;
             Action();
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space)) // 跳躍
             {
 
+                // 控制剛體部分
                 rb.velocity = new Vector2(rb.velocity.x, 0);
                 rb.AddForce(new Vector2(rb.velocity.x, 250f));
 
 
-                anim.SetBool("Jump", true);
+                anim.SetTrigger("Jump");
 
 
             }
 
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.F)) // 講話
             {
-                anim.SetTrigger("Wave");
-                IsWave = true;
+                anim.SetTrigger("Talk");
+                
             }
 
         }
         else if (CurrentBaseState.fullPathHash == JumpState)
         {
-            col.height = Curve.Evaluate(JumpCurveTime);
-            col.center = new Vector3(col.center.x, col.height / 2, col.center.z);
+            col.height = Curve.Evaluate(JumpCurveTime); // 模型碰撞高度
+            col.center = new Vector3(col.center.x, col.height / 2, col.center.z); // 模型碰撞中心 高度/2
 
             JumpCurveTime += Time.deltaTime;
-            anim.SetBool("Jump", false);
+            
             Action();
 
         }
@@ -101,8 +102,7 @@ public class HumanAnimation : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.D) && IsLT == false) { IsRT = false; anim.SetBool("Right", false); anim.SetFloat("Direction", 0); }
         if (Input.GetKeyUp(KeyCode.Q)) { IsQ = false; }
         if (Input.GetKeyUp(KeyCode.E)) { IsE = false; }
-        if (Input.GetKeyUp(KeyCode.Space)) { anim.SetBool("Jump", false); }
-        if (Input.GetKeyUp(KeyCode.F)) { IsWave = false; }
+        
 
 
     }
