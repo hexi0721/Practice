@@ -12,7 +12,7 @@ public class PushDominoe : MonoBehaviour
     void Update()
     {
         
-        if(Input.GetKeyDown(KeyCode.Space)) 
+        if(Input.GetMouseButtonDown(0)) 
         {
 
             DominoeStart.GetComponent<Rigidbody>().AddForce(Force , 0 , 0 , ForceMode.Impulse);
