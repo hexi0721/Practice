@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Flag : MonoBehaviour
+public class Goal : MonoBehaviour
 {
     public MyCharacter character;
 
@@ -23,6 +23,8 @@ public class Flag : MonoBehaviour
             character.CharacterStop();
             FinishText.SetActive(true);
         }
+
+        Debug.Log(true);
     }
 
     
