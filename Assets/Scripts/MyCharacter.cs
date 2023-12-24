@@ -21,14 +21,18 @@ public class MyCharacter : MonoBehaviour
     
     void Update()
     {
-        Vector3 speed = Vector3.zero; 
+        Vector3 speed = Vector3.zero;
 
-        if ( Movable )
+        Debug.Log("Movable " + Movable);
+        Debug.Log("controller.isGrounded " + controller.isGrounded);
+
+        if ( Movable && controller.isGrounded)
         {
             speed.x = -1.414f;
             
         }
         
+        Debug.Log(speed);
         controller.SimpleMove( speed );
 
 
