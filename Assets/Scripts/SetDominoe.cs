@@ -24,7 +24,7 @@ public class SetDominoe : MonoBehaviour
 
         for (int i = 1;i <= Num;i++)
         {
-            Instantiate(DominoePrefab , transform.position + interval * i * pos , Quaternion.identity);
+            Instantiate(DominoePrefab , transform.position + interval * i * pos , Quaternion.Euler(0,90,0));
         }
         
     }

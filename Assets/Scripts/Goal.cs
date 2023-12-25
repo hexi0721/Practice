@@ -24,7 +24,7 @@ public class Goal : MonoBehaviour
             FinishText.SetActive(true);
         }
 
-        Debug.Log(true);
+        
     }
 
     
