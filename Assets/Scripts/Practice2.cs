@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class Practice2 : MonoBehaviour
 {
     CharacterController controller;
     Animator anim;
 
-    bool IsFW, IsBK, IsLT, IsRT;
-    Vector3 speed;
-
+    bool IsFW, IsBK, IsLT, IsRT , IsJump , IsFall;
     
-    private Vector3 playerVelocity;
+    private Vector3 playerVelocity , speed;
     
     private float playerSpeed = 2.0f;
     private float jumpHeight = 1.0f;
@@ -22,54 +21,75 @@ public class Practice2 : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+
+        IsFW = false;
+        IsBK = false;
+        IsLT = false;
+        IsRT = false;
+        IsJump = false;
+        IsFall = false;
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if (controller.isGrounded && playerVelocity.y < 0)
-        {
-
-            playerVelocity.y = 0;
-
-        }
-
         Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
-        playerVelocity.y += gravityValue * Time.deltaTime;
-        controller.Move(playerVelocity * Time.deltaTime);
-
-
 
         if (move != Vector3.zero)
         {
             transform.forward = move;
-            controller.Move(move * Time.deltaTime * playerSpeed);
+            anim.SetBool("Forward", true);
+        }
+        else
+        {
+            anim.SetBool("Forward", false);
         }
 
-        // Changes the height position of the player..
+        
+        
+        // Changes the height position of the player
+        playerVelocity.y += gravityValue * Time.deltaTime;
+
+        if (playerVelocity.y < 0)
+            controller.Move((playerVelocity + move) * Time.deltaTime * playerSpeed);
+        else
+            controller.Move((playerVelocity + move) * Time.deltaTime);
+
         Debug.Log(controller.isGrounded);
+        if (controller.isGrounded && playerVelocity.y < 0)
+        {
+            playerVelocity.y = 0f;
+            IsJump = false;
+
+            
+            if (IsFall)
+            {
+                anim.SetBool("Fall", false);
+                anim.SetTrigger("Land");
+                IsFall = false;
+            }
+                
+        }
+
+        if (!IsJump && playerVelocity.y < -0.1f)
+        {
+            anim.SetBool("Fall", true);
+            IsFall = true;
+        }
+        
+
         if (Input.GetKeyDown(KeyCode.Space) && controller.isGrounded)
         {
+            anim.SetTrigger("Jump");
+            IsJump = true;
             playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+            
         }
 
         
         
-        
 
-        
-
-
-
-
-        /*if (Input.GetKeyUp(KeyCode.W)) { IsFW = false; anim.SetBool("Forward", false); anim.SetFloat("Speed", 0); }
-        if (Input.GetKeyUp(KeyCode.S)) { IsBK = false; anim.SetBool("Backward", false); anim.SetFloat("Speed", 0); }
-        if (Input.GetKeyUp(KeyCode.A) && IsRT == false) { IsLT = false; anim.SetBool("Left", false); anim.SetFloat("Direction", 0); }
-        if (Input.GetKeyUp(KeyCode.D) && IsLT == false) { IsRT = false; anim.SetBool("Right", false); anim.SetFloat("Direction", 0); }
-        if (Input.GetKeyUp(KeyCode.Q)) { IsQ = false; }
-        if (Input.GetKeyUp(KeyCode.E)) { IsE = false; }*/
 
         //controller.SimpleMove(speed);
     }

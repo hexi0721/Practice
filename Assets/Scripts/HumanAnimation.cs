@@ -27,6 +27,7 @@ public class HumanAnimation : MonoBehaviour
     static int Right = Animator.StringToHash("Base Layer.Right");
     static int Left = Animator.StringToHash("Base Layer.Left");
     static int JumpState = Animator.StringToHash("Base Layer.Jump");
+    static int FallState = Animator.StringToHash("Base Layer.Fall");
     //static int TalkState = Animator.StringToHash("Base Layer.Talk");
 
 
@@ -210,5 +211,21 @@ public class HumanAnimation : MonoBehaviour
         
         
     }
-    
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision.transform.tag);
+    }
+
+    private void OnCollisionExit(Collision collision) 
+    {
+
+        if (collision.transform.CompareTag(""))
+        {
+
+        }
+
+
+    }
 }
