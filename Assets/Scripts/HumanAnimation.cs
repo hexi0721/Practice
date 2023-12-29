@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -5,17 +6,18 @@ using UnityEngine;
 
 public class HumanAnimation : MonoBehaviour
 {
+    
 
-
+    float jumpHeight = 5.0f;
     float JumpCurveTime = 0;
-    Animator anim;
-
+    
     public AnimationCurve Curve; // 配合跳躍高度
     CapsuleCollider col;
     Rigidbody rb;
 
-    [SerializeField] bool IsFW, IsBK, IsLT, IsRT , IsQ , IsE ;
+    bool IsFW, IsBK, IsLT, IsRT , IsQ , IsE , IsGround , IsJump ,IsFall;
 
+    Animator anim;
     AnimatorStateInfo CurrentBaseState;
 
     static int Idle01State = Animator.StringToHash("Base Layer.Idle01");
@@ -27,8 +29,6 @@ public class HumanAnimation : MonoBehaviour
     static int Right = Animator.StringToHash("Base Layer.Right");
     static int Left = Animator.StringToHash("Base Layer.Left");
     static int JumpState = Animator.StringToHash("Base Layer.Jump");
-    static int FallState = Animator.StringToHash("Base Layer.Fall");
-    //static int TalkState = Animator.StringToHash("Base Layer.Talk");
 
 
     private void Start()
@@ -36,6 +36,8 @@ public class HumanAnimation : MonoBehaviour
 
 
         anim = GetComponent<Animator>();
+        CurrentBaseState = anim.GetCurrentAnimatorStateInfo(0);
+
         col = GetComponent<CapsuleCollider>();
         rb = GetComponent<Rigidbody>();
 
@@ -45,6 +47,9 @@ public class HumanAnimation : MonoBehaviour
         IsRT = false;
         IsQ = false;
         IsE = false;
+        IsGround = false;
+        IsJump = false;
+        IsFall = false;
 
     }
 
@@ -57,24 +62,24 @@ public class HumanAnimation : MonoBehaviour
         //float h = Input.GetAxis("Horizontal");
         //anim.SetFloat("Direction", h);
 
-        CurrentBaseState = anim.GetCurrentAnimatorStateInfo(0);
+        CheckGround();
+        CheckFall();
+        
 
         if ((CurrentBaseState.fullPathHash == Idle01State || CurrentBaseState.fullPathHash == toIdle01State || CurrentBaseState.fullPathHash == Idle02State || CurrentBaseState.fullPathHash == toIdle02State ||
-            CurrentBaseState.fullPathHash == Forward || CurrentBaseState.fullPathHash == Backward || CurrentBaseState.fullPathHash == Right || CurrentBaseState.fullPathHash == Left) )
+            CurrentBaseState.fullPathHash == Forward || CurrentBaseState.fullPathHash == Backward || CurrentBaseState.fullPathHash == Right || CurrentBaseState.fullPathHash == Left))
         {
+            
             JumpCurveTime = 0;
             Action();
 
-            if (Input.GetKeyDown(KeyCode.Space)) // 跳躍
+
+            if (Input.GetKeyDown(KeyCode.Space) && IsGround) // 跳躍
             {
 
-                // 控制剛體部分
-                rb.velocity = new Vector2(rb.velocity.x, 0);
-                rb.AddForce(new Vector2(rb.velocity.x, 250f));
-
-
+                rb.AddForce(new Vector3(0, jumpHeight, 0), ForceMode.Impulse);
                 anim.SetTrigger("Jump");
-
+                IsJump = true;
 
             }
 
@@ -95,16 +100,53 @@ public class HumanAnimation : MonoBehaviour
             Action();
 
         }
+
+
+        KeyCodeUp();
+
+        
         
 
+
+    }
+
+    private void CheckFall()
+    {
+        if (rb.velocity.y < -1f && !IsGround && !IsJump)
+        {
+            IsFall = true;
+            anim.SetBool("Fall", true);
+        }
+        else
+        {
+            IsFall = false;
+            anim.SetBool("Fall", false);
+        }
+    }
+
+    private void KeyCodeUp()
+    {
         if (Input.GetKeyUp(KeyCode.W)) { IsFW = false; anim.SetBool("Forward", false); anim.SetFloat("Speed", 0); }
         if (Input.GetKeyUp(KeyCode.S)) { IsBK = false; anim.SetBool("Backward", false); anim.SetFloat("Speed", 0); }
         if (Input.GetKeyUp(KeyCode.A) && IsRT == false) { IsLT = false; anim.SetBool("Left", false); anim.SetFloat("Direction", 0); }
         if (Input.GetKeyUp(KeyCode.D) && IsLT == false) { IsRT = false; anim.SetBool("Right", false); anim.SetFloat("Direction", 0); }
         if (Input.GetKeyUp(KeyCode.Q)) { IsQ = false; }
         if (Input.GetKeyUp(KeyCode.E)) { IsE = false; }
-        
+    }
 
+    private void CheckGround()
+    {
+        
+        IsGround = Physics.Raycast(transform.position + Vector3.up , Vector3.down , 1.01f);
+        if (IsGround)
+        {
+            IsJump = false;
+        }
+        
+        if (IsFall && IsGround)
+        {
+            anim.SetTrigger("Land");
+        }
 
     }
 
@@ -213,19 +255,5 @@ public class HumanAnimation : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log(collision.transform.tag);
-    }
 
-    private void OnCollisionExit(Collision collision) 
-    {
-
-        if (collision.transform.CompareTag(""))
-        {
-
-        }
-
-
-    }
 }
