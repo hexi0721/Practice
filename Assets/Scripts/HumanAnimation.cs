@@ -36,8 +36,6 @@ public class HumanAnimation : MonoBehaviour
 
 
         anim = GetComponent<Animator>();
-        CurrentBaseState = anim.GetCurrentAnimatorStateInfo(0);
-
         col = GetComponent<CapsuleCollider>();
         rb = GetComponent<Rigidbody>();
 
@@ -55,7 +53,7 @@ public class HumanAnimation : MonoBehaviour
 
     void Update()
     {
-        
+        CurrentBaseState = anim.GetCurrentAnimatorStateInfo(0); // 得在Update裡
         float v = Input.GetAxis("Vertical");
         anim.SetFloat("Speed", v); // 判斷為走路或跑步 
 

@@ -6,36 +6,43 @@ using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class Practice2 : MonoBehaviour
 {
+    public float tmp;
+
     CharacterController controller;
     Animator anim;
 
-    bool IsFW, IsBK, IsLT, IsRT , IsJump , IsFall;
+    float waiting = 0f;
+
+    bool IsJump , IsFall , IsGround;
     
-    private Vector3 playerVelocity , speed;
+    private Vector3 playerVelocity;
     
     private float playerSpeed = 2.0f;
     private float jumpHeight = 1.0f;
     private float gravityValue = -9.81f;
+    
+    
 
     private void Start()
     {
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
 
-        IsFW = false;
-        IsBK = false;
-        IsLT = false;
-        IsRT = false;
+        
         IsJump = false;
         IsFall = false;
+        IsGround = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
+        
         Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
+
+        
         if (move != Vector3.zero)
         {
             transform.forward = move;
@@ -46,145 +53,80 @@ public class Practice2 : MonoBehaviour
             anim.SetBool("Forward", false);
         }
 
-        
-        
-        // Changes the height position of the player
+
+
         playerVelocity.y += gravityValue * Time.deltaTime;
 
-        if (playerVelocity.y < 0)
-            controller.Move((playerVelocity + move) * Time.deltaTime * playerSpeed);
-        else
-            controller.Move((playerVelocity + move) * Time.deltaTime);
-
-        Debug.Log(controller.isGrounded);
-        if (controller.isGrounded && playerVelocity.y < 0)
+        if (IsFall || IsJump)
         {
-            playerVelocity.y = 0f;
-            IsJump = false;
-
-            
-            if (IsFall)
-            {
-                anim.SetBool("Fall", false);
-                anim.SetTrigger("Land");
-                IsFall = false;
-            }
-                
+            Debug.Log(1);
+            controller.Move((move + playerVelocity) * Time.deltaTime);
+        }
+        else
+        {
+            Debug.Log(2);
+            controller.Move((move + playerVelocity) * Time.deltaTime * playerSpeed);
         }
 
-        if (!IsJump && playerVelocity.y < -0.1f)
+        if(waiting >= 0)
         {
-            anim.SetBool("Fall", true);
-            IsFall = true;
+            waiting -= Time.deltaTime;
         }
         
+        
 
-        if (Input.GetKeyDown(KeyCode.Space) && controller.isGrounded)
+        CheckGround();
+        CheckFall();
+
+        Debug.Log(waiting);
+        if (Input.GetKeyDown(KeyCode.Space) && IsGround && waiting <= 0)
         {
             anim.SetTrigger("Jump");
             IsJump = true;
             playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-            
+
+            waiting = 1.74f;
         }
-
-        
         
 
+        
 
-        //controller.SimpleMove(speed);
     }
 
-    void Action()
+    
+
+    private void CheckGround()
     {
-        speed = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.W) && IsBK == false) // 前進
+
+        IsGround = Physics.Raycast(transform.position + Vector3.up, Vector3.down, 1.1f);
+
+        
+        if (IsGround)
         {
-            IsFW = true;
-            anim.SetBool("Forward", true);
-
-            if (Input.GetKey(KeyCode.A) && IsRT == false) // 左走;
-            {
-
-                anim.SetFloat("Direction", -1);
-                anim.SetBool("Left", true);
-                speed.x = -1 / 1.414f;
-                speed.z = 1 / 1.414f;
-
-                IsLT = true;
-
-            }
-            else if (Input.GetKey(KeyCode.D) && IsLT == false) // 右走
-            {
-
-                anim.SetFloat("Direction", 1);
-                anim.SetBool("Right", true);
-                speed.x = 1 / 1.414f;
-                speed.z = 1 / 1.414f;
-                IsRT = true;
-
-            }
-            else
-            {
-                speed.z = 1.0f;
-            }
-
-
-
-
-        }
-        else if (Input.GetKey(KeyCode.S) && IsFW == false) // 後退
-        {
-            IsBK = true;
-            anim.SetBool("Backward", true);
-
-            if (Input.GetKey(KeyCode.A) && IsRT == false) // 左走;
-            {
-
-                anim.SetFloat("Direction", -1);
-                anim.SetBool("Left", true);
-                speed.x = -1 / 1.414f;
-                speed.z = -1 / 1.414f;
-                IsLT = true;
-
-            }
-            else if (Input.GetKey(KeyCode.D) && IsLT == false) // 右走
-            {
-
-                anim.SetFloat("Direction", 1);
-                anim.SetBool("Right", true);
-                speed.x = 1 / 1.414f;
-                speed.z = -1 / 1.414f;
-                IsRT = true;
-
-            }
-            else
-            {
-                speed.z = -1.0f;
-            }
+            playerVelocity.y = 0f;
+            IsJump = false;
         }
 
-        if (Input.GetKey(KeyCode.A) && IsRT == false && IsFW == false && IsBK == false) // 左走;
+        if (IsFall && IsGround)
         {
-
-            anim.SetFloat("Direction", -1);
-            anim.SetBool("Left", true);
-            speed.x = -1.0f;
-            IsLT = true;
+            anim.SetTrigger("Land");
         }
 
-        if (Input.GetKey(KeyCode.D) && IsLT == false && IsFW == false && IsBK == false) // 右走
+    }
+
+    private void CheckFall()
+    {
+
+        if (playerVelocity.y < -2f && !IsGround && !IsJump)
         {
-
-            anim.SetFloat("Direction", 1);
-            anim.SetBool("Right", true);
-            speed.x = 1.0f;
-            IsRT = true;
-
+            IsFall = true;
+            anim.SetBool("Fall", true);
         }
-
-
-
-
+        else
+        {
+            IsFall = false;
+            anim.SetBool("Fall", false);
+        }
     }
 }
