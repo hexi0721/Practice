@@ -2,23 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBullet : MonoBehaviour
+public class EnemyBullet : MonoBehaviour
 {
     [SerializeField]
     float bulletSpeed;
 
+    
     void Update()
     {
-        transform.Translate(bulletSpeed * Vector3.forward * Time.deltaTime);
+        transform.Translate(bulletSpeed * new Vector3(0,0,-1) * Time.deltaTime);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
 
-        if (!collision.transform.CompareTag("Bullet"))
+        if (!collision.transform.CompareTag("EnemyBullet"))
         {
             Debug.Log(collision.transform.name);
             Destroy(gameObject);
         }
+
+        
     }
 }
