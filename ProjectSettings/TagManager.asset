@@ -9,6 +9,7 @@ TagManager:
   - Bullet
   - EnemyBullet
   - Enemy
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -16,8 +17,8 @@ TagManager:
   - human
   - Water
   - UI
-  - 
-  - 
+  - PlayerBullet
+  - EnemyBullet
   - cube2
   - 
   - 

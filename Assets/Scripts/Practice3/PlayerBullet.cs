@@ -17,7 +17,7 @@ public class PlayerBullet : MonoBehaviour
 
         if (!collision.transform.CompareTag("Bullet"))
         {
-            Debug.Log(collision.transform.name);
+            //Debug.Log(collision.transform.name);
             Destroy(gameObject);
         }
     }
