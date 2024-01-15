@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
+//using UnityEngine.UIElements;
 
 public class EnemyAction : MonoBehaviour
 {
     public GameObject EnemyBulletPrefab;
+    public Slider SliderHP;
     //public int tmp;
 
     bool DontMove;
@@ -23,6 +26,8 @@ public class EnemyAction : MonoBehaviour
     private void Start()
     {
         Hp = 25;
+        InitHp();
+        
         enemyAttackSpeed = 2f;
         enemySpeed = 2.0f;
         enemyRestTime = 1.5f;
@@ -41,12 +46,13 @@ public class EnemyAction : MonoBehaviour
         Move();
         Shoot();
 
+    }
 
 
-        
-
-
-
+    void InitHp()
+    {
+        SliderHP.maxValue = Hp;
+        SliderHP.value = Hp;
     }
 
     private void Shoot() // Æg¿ª
@@ -98,7 +104,8 @@ public class EnemyAction : MonoBehaviour
         if (collision.transform.CompareTag("Bullet"))
         {
             Hp--;
-            if(Hp == 0)
+            SliderHP.value = Hp;
+            if (Hp == 0)
             {
                 Destroy(gameObject);
             }

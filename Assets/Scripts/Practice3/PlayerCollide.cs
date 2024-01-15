@@ -11,10 +11,12 @@ public class PlayerCollide : MonoBehaviour
 
 
             PlayerAction.Instance.Hp--;
+            PlayerAction.Instance.HpImage.fillAmount = PlayerAction.Instance.Hp / PlayerAction.Instance.MaxHp;
+
             if (PlayerAction.Instance.Hp == 0)
             {
                 Destroy(PlayerAction.Instance.gameObject);
-                //p.enabled = false;
+                
             }
         }
     }

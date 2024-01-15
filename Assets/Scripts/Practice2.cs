@@ -59,12 +59,12 @@ public class Practice2 : MonoBehaviour
 
         if (IsFall || IsJump)
         {
-            Debug.Log(1);
+            //Debug.Log(1);
             controller.Move((move + playerVelocity) * Time.deltaTime);
         }
         else
         {
-            Debug.Log(2);
+            //Debug.Log(2);
             controller.Move((move + playerVelocity) * Time.deltaTime * playerSpeed);
         }
 
@@ -78,7 +78,7 @@ public class Practice2 : MonoBehaviour
         CheckGround();
         CheckFall();
 
-        Debug.Log(waiting);
+        //Debug.Log(waiting);
         if (Input.GetKeyDown(KeyCode.Space) && IsGround && waiting <= 0)
         {
             anim.SetTrigger("Jump");

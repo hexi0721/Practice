@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class PlayerAction : MonoBehaviour
@@ -18,15 +19,17 @@ public class PlayerAction : MonoBehaviour
 
 
     public GameObject playerBullet;
-    PlayerAction p; // 本身
+    public Image HpImage;
+    
 
     float Range; // 限制能移動的區域
     float time;
 
     [Header("玩家屬性")]
     [SerializeField] float speed; // 玩家速度
-    [SerializeField] public int Hp; // 玩家生命 讓GameController判斷0時結束遊戲
+    [SerializeField] public float Hp; // 玩家生命 讓GameController判斷0時結束遊戲
     [SerializeField] float AttackSpeed;
+    public float MaxHp;
     int shootMode; // 0:單發 , 1:三發
     public bool TripleShotItemActivate;
     float TripleShotItemActivateEndTime;
@@ -39,8 +42,8 @@ public class PlayerAction : MonoBehaviour
 
     void Start()
     {
-
-        Hp = 3;
+        MaxHp = 4.0f;
+        Hp = MaxHp;
         speed = 1.0f;
         AttackSpeed = 1.0f;
 
@@ -48,13 +51,17 @@ public class PlayerAction : MonoBehaviour
         Range = -2.47f;
         TripleShotItemActivate = false;
 
-        p = GetComponent<PlayerAction>();
+        
     }
 
     
     void Update()
     {
         time += Time.deltaTime;
+
+        
+
+
         Move(); 
         Shoot();
         TripleShotItem();
@@ -142,18 +149,7 @@ public class PlayerAction : MonoBehaviour
     }
 
 
-    /*private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.transform.CompareTag("EnemyBullet"))
-        {
-            Hp--;
-            if (Hp == 0)
-            {
-                Destroy(gameObject);
-                p.enabled = false;
-            }
-        }
-    }*/
+    
 
 
     
