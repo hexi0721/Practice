@@ -11,7 +11,7 @@ public class HumanAnimation : MonoBehaviour
     float jumpHeight = 5.0f;
     float JumpCurveTime = 0;
     
-    public AnimationCurve Curve; // °t¦X¸õÅD°ª«×
+    public AnimationCurve Curve; // ï¿½tï¿½Xï¿½ï¿½ï¿½Dï¿½ï¿½ï¿½ï¿½
     CapsuleCollider col;
     Rigidbody rb;
 
@@ -53,9 +53,9 @@ public class HumanAnimation : MonoBehaviour
 
     void Update()
     {
-        CurrentBaseState = anim.GetCurrentAnimatorStateInfo(0); // ±o¦bUpdate¸Ì
+        CurrentBaseState = anim.GetCurrentAnimatorStateInfo(0); // ï¿½oï¿½bUpdateï¿½ï¿½
         float v = Input.GetAxis("Vertical");
-        anim.SetFloat("Speed", v); // §PÂ_¬°¨«¸ô©Î¶]¨B 
+        anim.SetFloat("Speed", v); // ï¿½Pï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¶]ï¿½B 
 
         //float h = Input.GetAxis("Horizontal");
         //anim.SetFloat("Direction", h);
@@ -72,7 +72,7 @@ public class HumanAnimation : MonoBehaviour
             Action();
 
 
-            if (Input.GetKeyDown(KeyCode.Space) && IsGround) // ¸õÅD
+            if (Input.GetKeyDown(KeyCode.Space) && IsGround) // ï¿½ï¿½ï¿½D
             {
 
                 rb.AddForce(new Vector3(0, jumpHeight, 0), ForceMode.Impulse);
@@ -81,7 +81,7 @@ public class HumanAnimation : MonoBehaviour
 
             }
 
-            if (Input.GetKeyDown(KeyCode.F)) // Á¿¸Ü
+            if (Input.GetKeyDown(KeyCode.F)) // ï¿½ï¿½ï¿½ï¿½
             {
                 anim.SetTrigger("Talk");
                 
@@ -90,8 +90,8 @@ public class HumanAnimation : MonoBehaviour
         }
         else if (CurrentBaseState.fullPathHash == JumpState)
         {
-            col.height = Curve.Evaluate(JumpCurveTime); // ¼Ò«¬¸I¼²°ª«×
-            col.center = new Vector3(col.center.x, col.height / 2, col.center.z); // ¼Ò«¬¸I¼²¤¤¤ß °ª«×/2
+            col.height = Curve.Evaluate(JumpCurveTime); // ï¿½Ò«ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            col.center = new Vector3(col.center.x, col.height / 2, col.center.z); // ï¿½Ò«ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½/2
 
             JumpCurveTime += Time.deltaTime;
             
@@ -110,7 +110,7 @@ public class HumanAnimation : MonoBehaviour
 
     private void CheckFall()
     {
-        if (rb.velocity.y < -1f && !IsGround && !IsJump)
+        if (rb.linearVelocity.y < -1f && !IsGround && !IsJump)
         {
             IsFall = true;
             anim.SetBool("Fall", true);
@@ -164,12 +164,12 @@ public class HumanAnimation : MonoBehaviour
             transform.RotateAround(transform.position, new Vector3(0, 1, 0), 60 * Time.deltaTime);
         }
 
-        if (Input.GetKey(KeyCode.W) && IsBK == false) // «e¶i
+        if (Input.GetKey(KeyCode.W) && IsBK == false) // ï¿½eï¿½i
         {
             IsFW = true;
             anim.SetBool("Forward", true);
 
-            if (Input.GetKey(KeyCode.A) && IsRT == false) // ¥ª¨«;
+            if (Input.GetKey(KeyCode.A) && IsRT == false) // ï¿½ï¿½ï¿½ï¿½;
             {
 
                 anim.SetFloat("Direction", -1);
@@ -178,7 +178,7 @@ public class HumanAnimation : MonoBehaviour
                 IsLT = true;
 
             }
-            else if (Input.GetKey(KeyCode.D) && IsLT == false) // ¥k¨«
+            else if (Input.GetKey(KeyCode.D) && IsLT == false) // ï¿½kï¿½ï¿½
             {
 
                 anim.SetFloat("Direction", 1);
@@ -196,12 +196,12 @@ public class HumanAnimation : MonoBehaviour
 
 
         }
-        else if (Input.GetKey(KeyCode.S) && IsFW == false) // «á°h
+        else if (Input.GetKey(KeyCode.S) && IsFW == false) // ï¿½ï¿½h
         {
             IsBK = true;
             anim.SetBool("Backward", true);
 
-            if (Input.GetKey(KeyCode.A) && IsRT == false) // ¥ª¨«;
+            if (Input.GetKey(KeyCode.A) && IsRT == false) // ï¿½ï¿½ï¿½ï¿½;
             {
 
                 anim.SetFloat("Direction", -1);
@@ -210,7 +210,7 @@ public class HumanAnimation : MonoBehaviour
                 IsLT = true;
 
             }
-            else if (Input.GetKey(KeyCode.D) && IsLT == false) // ¥k¨«
+            else if (Input.GetKey(KeyCode.D) && IsLT == false) // ï¿½kï¿½ï¿½
             {
 
                 anim.SetFloat("Direction", 1);
@@ -227,7 +227,7 @@ public class HumanAnimation : MonoBehaviour
 
         }
 
-        if (Input.GetKey(KeyCode.A) && IsRT == false && IsFW == false && IsBK == false) // ¥ª¨«;
+        if (Input.GetKey(KeyCode.A) && IsRT == false && IsFW == false && IsBK == false) // ï¿½ï¿½ï¿½ï¿½;
         {
 
             anim.SetFloat("Direction", -1);
@@ -237,7 +237,7 @@ public class HumanAnimation : MonoBehaviour
 
         }
 
-        if (Input.GetKey(KeyCode.D) && IsLT == false && IsFW == false && IsBK == false) // ¥k¨«
+        if (Input.GetKey(KeyCode.D) && IsLT == false && IsFW == false && IsBK == false) // ï¿½kï¿½ï¿½
         {
 
             anim.SetFloat("Direction", 1);

@@ -5,13 +5,17 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/AnimationPraticeScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/CollidePractice.unity
     guid: 42aa3890f9b27cd4e9b2a822ed7140fc
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Practice3.unity
     guid: da4306f94ed9a6944b8ca436e9ce384a
+  - enabled: 1
+    path: Assets/Prefabs/HealthSystem.unity
+    guid: 358d24c2b39a3f94583f9ca5a6eb3ac6
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0
